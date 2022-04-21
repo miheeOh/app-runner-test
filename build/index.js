@@ -8,6 +8,9 @@ const app = (0, express_1.default)();
 app.get('/test', (req, res) => {
     res.send('test');
 });
+app.get('/runner', (req, res) => {
+    res.send('runner');
+});
 app.listen(3000, () => {
     console.log('server start 3000');
 });
