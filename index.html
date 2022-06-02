@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S3 sample</title>
+</head>
+<body>
+    <form id="imageForm">
+        <input id="imageFile" type="file" accept="image/*">
+        <button type="submit">이미지 업로드</button>
+    </form>
+
+    <script>
+
+        const imageForm = document.querySelector('#imageForm');
+        const imageFile = document.querySelector('#imageFile');
+
+        imageForm.addEventListener('submit', async () => {
+            event.preventDefault();
+            const file = imageFile.files[0];
+            const response = await fetch('http://localhost:3000/s3');
+          
+            const { url } = await response.json();
+            
+
+            await fetch(url, {
+                method: 'PUT',
+                headers:{
+                    "Content-Type":"multipart/form-data"
+                },
+                body: file
+            });
+
+            
+            const imageURL = url.split('?')[0];
+            console.log(imageURL);
+
+            const img = document.createElement('img');
+            img.src = imageURL;
+            document.body.appendChild(img);
+        })
+    </script>
+</body>
+</html>
