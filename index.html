@@ -11,20 +11,17 @@
         <input id="imageFile" type="file" accept="image/*">
         <button type="submit">이미지 업로드</button>
     </form>
-
     <script>
-
         const imageForm = document.querySelector('#imageForm');
         const imageFile = document.querySelector('#imageFile');
-
         imageForm.addEventListener('submit', async () => {
             event.preventDefault();
+            // 이미지를 변수에 담아둠
             const file = imageFile.files[0];
+            // 서버에 요청하여 이미지를 업로드 할 s3 링크 응답받음
             const response = await fetch('http://localhost:3000/s3');
-          
             const { url } = await response.json();
-            
-
+            // 해당 url에 이미지 업데이트
             await fetch(url, {
                 method: 'PUT',
                 headers:{
@@ -32,11 +29,8 @@
                 },
                 body: file
             });
-
-            
+            // 이미지 업로드 후 해당 url에서 필요한 부분만 구조 분해하여 링크 불러와서 화면에 보여줌
             const imageURL = url.split('?')[0];
-            console.log(imageURL);
-
             const img = document.createElement('img');
             img.src = imageURL;
             document.body.appendChild(img);

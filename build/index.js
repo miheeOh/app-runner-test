@@ -13,18 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const nunjucks_1 = __importDefault(require("nunjucks"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const s3_1 = require("./services/s3");
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 // app.use(express.static('public'));
 app.use((0, cors_1.default)());
-app.set('view engine', 'html');
-nunjucks_1.default.configure('views', {
-    express: app,
-    watch: true
-});
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.get('/s3', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const url = yield (0, s3_1.generateUploadUrl)();
@@ -40,6 +34,7 @@ app.get('/test', (req, res) => {
 app.get('/runner', (req, res) => {
     res.send('runner');
 });
+console.log(process.env.NODE_ENV);
 app.listen(3000, () => {
     console.log('server start 3000');
 });
